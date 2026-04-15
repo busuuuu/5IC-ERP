@@ -2,4 +2,3 @@
 sala modifica thomas
 ciao
 
-siete gay
