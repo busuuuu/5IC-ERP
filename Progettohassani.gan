@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?><project name="TechLogix ERP System" company="TechLogix Solutions" webLink="" view-date="2025-01-06" view-index="1" gantt-divider-location="350" resource-divider-location="300" version="3.1.3103" locale="it_IT">
+    <description/>
+    <view zooming-state="default:7" id="gantt-chart">
+        <field id="tpd3" name="Nome" width="136" order="0"/>
+        <field id="tpd4" name="Data dinizio" width="59" order="1"/>
+        <field id="tpd5" name="Data di fine" width="59" order="2"/>
+        <field id="tpd6" name="Durata" width="41" order="3"/>
+        <field id="tpd7" name="Completamento" width="36" order="4"/>
+    </view>
+    <view id="resource-table">
+        <field id="0" name="Nome" width="156" order="0"/>
+        <field id="1" name="Ruolo predefinito" width="140" order="1"/>
+    </view>
+    <!-- -->
+    <calendars>
+        <day-types>
+            <day-type id="0"/>
+            <day-type id="1"/>
+            <default-week id="1" name="default" sun="1" mon="0" tue="0" wed="0" thu="0" fri="0" sat="1"/>
+            <only-show-weekends value="false"/>
+            <overriden-day-types/>
+            <days/>
+        </day-types>
+    </calendars>
+    <tasks empty-milestones="true">
+        <taskproperties>
+            <taskproperty id="tpd0" name="type" type="default" valuetype="icon"/>
+            <taskproperty id="tpd1" name="priority" type="default" valuetype="icon"/>
+            <taskproperty id="tpd2" name="info" type="default" valuetype="icon"/>
+            <taskproperty id="tpd3" name="name" type="default" valuetype="text"/>
+            <taskproperty id="tpd4" name="begindate" type="default" valuetype="date"/>
+            <taskproperty id="tpd5" name="enddate" type="default" valuetype="date"/>
+            <taskproperty id="tpd6" name="duration" type="default" valuetype="int"/>
+            <taskproperty id="tpd7" name="completion" type="default" valuetype="int"/>
+            <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
+            <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
+        </taskproperties>
+        <task id="1" name="FASE 1 — Setup &amp; Analisi" color="#3a86ff" meeting="false" start="2025-01-20" duration="185" complete="0" expand="true">
+            <task id="2" name="Analisi requisiti &amp; kick-off" color="#3a86ff" meeting="false" start="2025-09-22" duration="10" complete="0" expand="true"/>
+            <task id="3" name="Architettura database ERD" color="#3a86ff" meeting="false" start="2025-09-15" duration="5" complete="0" expand="true">
+                <depend id="2" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="4" name="Setup ambiente dev &amp; repository Git" color="#3a86ff" meeting="false" start="2025-09-15" duration="5" complete="0" expand="true">
+                <depend id="2" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="5" name="Definizione standard di codice &amp; CI/CD pipeline" color="#3a86ff" meeting="false" start="2025-01-20" duration="5" complete="0" expand="true">
+                <depend id="2" type="2" difference="0" hardness="Strong"/>
+            </task>
+        </task>
+        <task id="10" name="FASE 2 — Magazzino &amp; Approvvigionamento" color="#06b585" meeting="false" start="2025-08-04" duration="30" complete="0" expand="true">
+            <depend id="3" type="2" difference="0" hardness="Strong"/>
+            <depend id="4" type="2" difference="0" hardness="Strong"/>
+            <task id="11" name="Anagrafica articoli — backend API" color="#06b585" meeting="false" start="2025-09-01" duration="10" complete="0" expand="true"/>
+            <task id="12" name="Anagrafica articoli — frontend UI" color="#06b585" meeting="false" start="2025-09-01" duration="10" complete="0" expand="true"/>
+            <task id="13" name="Gestione scorte — logica carico/scarico" color="#06b585" meeting="false" start="2025-08-18" duration="10" complete="0" expand="true">
+                <depend id="11" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="14" name="Gestione scorte — interfaccia operatore" color="#06b585" meeting="false" start="2025-08-18" duration="10" complete="0" expand="true">
+                <depend id="12" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="15" name="Alert sottoscorta &amp; notifiche automatiche" color="#06b585" meeting="false" start="2025-08-04" duration="10" complete="0" expand="true">
+                <depend id="13" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="16" name="Registro fornitori &amp; storico ordini acquisto" color="#06b585" meeting="false" start="2025-08-04" duration="10" complete="0" expand="true">
+                <depend id="14" type="2" difference="0" hardness="Strong"/>
+            </task>
+        </task>
+        <task id="20" name="FASE 3 — Vendite &amp; CRM" color="#f59e0b" meeting="false" start="2025-03-03" duration="25" complete="0" expand="true">
+            <depend id="3" type="2" difference="0" hardness="Strong"/>
+            <task id="21" name="Anagrafica clienti — backend API" color="#f59e0b" meeting="false" start="2025-03-31" duration="5" complete="0" expand="true"/>
+            <task id="22" name="Anagrafica clienti — frontend UI" color="#f59e0b" meeting="false" start="2025-03-31" duration="5" complete="0" expand="true"/>
+            <task id="23" name="Gestione preventivi — motore di calcolo" color="#f59e0b" meeting="false" start="2025-03-17" duration="10" complete="0" expand="true">
+                <depend id="21" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="24" name="Gestione preventivi — interfaccia commerciale" color="#f59e0b" meeting="false" start="2025-03-17" duration="10" complete="0" expand="true">
+                <depend id="22" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="25" name="Ordini di vendita &amp; workflow approvazione" color="#f59e0b" meeting="false" start="2025-03-03" duration="10" complete="0" expand="true">
+                <depend id="23" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="26" name="Tracciamento stato ordine (In lavorazione / Spedito / Consegnato)" color="#f59e0b" meeting="false" start="2025-03-03" duration="10" complete="0" expand="true">
+                <depend id="24" type="2" difference="0" hardness="Strong"/>
+            </task>
+        </task>
+        <task id="30" name="FASE 4 — Produzione &amp; Distinta Base (BOM)" color="#ef476f" meeting="false" start="2025-03-10" duration="125" complete="0" expand="true">
+            <depend id="11" type="2" difference="0" hardness="Strong"/>
+            <task id="31" name="Modello dati BOM — struttura componenti" color="#ef476f" meeting="false" start="2025-08-18" duration="10" complete="0" expand="true"/>
+            <task id="32" name="Interfaccia configurazione BOM prodotti finiti" color="#ef476f" meeting="false" start="2025-03-24" duration="10" complete="0" expand="true"/>
+            <task id="33" name="Motore verifica disponibilità componenti" color="#ef476f" meeting="false" start="2025-08-04" duration="10" complete="0" expand="true">
+                <depend id="31" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="34" name="UI verifica &amp; simulazione produzione X pezzi" color="#ef476f" meeting="false" start="2025-03-10" duration="10" complete="0" expand="true">
+                <depend id="32" type="2" difference="0" hardness="Strong"/>
+            </task>
+        </task>
+        <task id="40" name="FASE 5 — Integrazione tra Moduli" color="#8b5cf6" meeting="false" start="2025-07-07" duration="20" complete="0" expand="true">
+            <depend id="15" type="2" difference="0" hardness="Strong"/>
+            <depend id="16" type="2" difference="0" hardness="Strong"/>
+            <depend id="33" type="2" difference="0" hardness="Strong"/>
+            <task id="41" name="Integrazione Magazzino ↔ Produzione (scarico automatico BOM)" color="#8b5cf6" meeting="false" start="2025-07-21" duration="10" complete="0" expand="true"/>
+            <task id="42" name="Integrazione Vendite ↔ Magazzino (riserva scorte su ordine)" color="#8b5cf6" meeting="false" start="2025-07-07" duration="5" complete="0" expand="true">
+                <depend id="41" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="43" name="Dashboard KPI — magazzino, vendite, produzione" color="#8b5cf6" meeting="false" start="2025-07-07" duration="10" complete="0" expand="true">
+                <depend id="41" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="44" name="Reporting PDF &amp; export Excel" color="#8b5cf6" meeting="false" start="2025-07-07" duration="5" complete="0" expand="true">
+                <depend id="41" type="2" difference="0" hardness="Strong"/>
+            </task>
+        </task>
+        <task id="50" name="FASE 6 — Testing &amp; Validazione" color="#f97316" meeting="false" start="2025-06-09" duration="20" complete="0" expand="true">
+            <depend id="42" type="2" difference="0" hardness="Strong"/>
+            <depend id="43" type="2" difference="0" hardness="Strong"/>
+            <depend id="44" type="2" difference="0" hardness="Strong"/>
+            <task id="51" name="Test unitari — backend (API, logica business)" color="#f97316" meeting="false" start="2025-06-23" duration="10" complete="0" expand="true"/>
+            <task id="52" name="Test unitari — frontend (componenti UI)" color="#f97316" meeting="false" start="2025-06-23" duration="10" complete="0" expand="true"/>
+            <task id="53" name="Test di integrazione end-to-end" color="#f97316" meeting="false" start="2025-06-23" duration="10" complete="0" expand="true"/>
+            <task id="54" name="User Acceptance Testing — UAT con key users" color="#f97316" meeting="false" start="2025-06-16" duration="5" complete="0" expand="true">
+                <depend id="51" type="2" difference="0" hardness="Strong"/>
+                <depend id="52" type="2" difference="0" hardness="Strong"/>
+                <depend id="53" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="55" name="Bug fix &amp; regressione post-UAT" color="#f97316" meeting="false" start="2025-06-09" duration="5" complete="0" expand="true">
+                <depend id="54" type="2" difference="0" hardness="Strong"/>
+            </task>
+        </task>
+        <task id="60" name="FASE 7 — Deploy &amp; Go-Live" color="#0e7490" meeting="false" start="2025-05-26" duration="20" complete="0" expand="true">
+            <depend id="51" type="2" difference="0" hardness="Strong"/>
+            <task id="61" name="Predisposizione ambiente di produzione (server/cloud)" color="#0e7490" meeting="false" start="2025-06-16" duration="5" complete="0" expand="true"/>
+            <task id="62" name="Migrazione dati da fogli Excel esistenti" color="#0e7490" meeting="false" start="2025-06-16" duration="5" complete="0" expand="true"/>
+            <task id="63" name="Verifica integrità dati migrati" color="#0e7490" meeting="false" start="2025-06-09" duration="5" complete="0" expand="true">
+                <depend id="62" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="64" name="Formazione utenti — magazzinieri e buyer" color="#0e7490" meeting="false" start="2025-06-09" duration="5" complete="0" expand="true">
+                <depend id="61" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="65" name="Formazione utenti — commerciali e management" color="#0e7490" meeting="false" start="2025-06-09" duration="5" complete="0" expand="true">
+                <depend id="61" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="66" name="Go-live &amp; supporto post-deploy (hypercare)" color="#0e7490" meeting="false" start="2025-05-26" duration="10" complete="0" expand="true">
+                <depend id="55" type="2" difference="0" hardness="Strong"/>
+                <depend id="63" type="2" difference="0" hardness="Strong"/>
+                <depend id="64" type="2" difference="0" hardness="Strong"/>
+                <depend id="65" type="2" difference="0" hardness="Strong"/>
+            </task>
+        </task>
+        <task id="99" name="Sistema ERP TechLogix — IN PRODUZIONE" color="#1e2a3a" meeting="true" start="2025-05-26" duration="0" complete="0" expand="true">
+            <depend id="66" type="2" difference="0" hardness="Strong"/>
+        </task>
+    </tasks>
+    <resources>
+        <resource id="0" name="Paolo Avogadro" function="Default:1" contacts="m.bianchi@techlogix.it" phone=""/>
+        <resource id="1" name="Stefano Benigni" function="Default:2" contacts="s.conti@techlogix.it" phone=""/>
+        <resource id="2" name="Davide Boffelli" function="Default:2" contacts="l.ferretti@techlogix.it" phone=""/>
+        <resource id="3" name="Lorenzo Bossi" function="Default:3" contacts="p.ricci@techlogix.it" phone=""/>
+        <resource id="4" name="Alessandro Bumma" function="Default:3" contacts="e.marchetti@techlogix.it" phone=""/>
+        <resource id="5" name="Federico Busuianu" function="Default:4" contacts="g.esposito@techlogix.it" phone=""/>
+        <resource id="6" name="Marco D'onofrio" function="Default:4" contacts="c.romano@techlogix.it" phone=""/>
+        <resource id="7" name="Mattia Galizzi" function="Default:4" contacts="m.colombo@techlogix.it" phone=""/>
+        <resource id="8" name="Maksim Gutsman" function="Default:4" contacts="a.fontana@techlogix.it" phone=""/>
+        <resource id="9" name="Marwan Hassani" function="Default:5" contacts="d.moretti@techlogix.it" phone=""/>
+        <resource id="10" name="Viktor Kachan" function="Default:5" contacts="g.barbieri@techlogix.it" phone=""/>
+        <resource id="11" name="Nashis Matacangay" function="Default:5" contacts="f.caruso@techlogix.it" phone=""/>
+        <resource id="12" name="Daniel Manenti" function="Default:6" contacts="a.deluca@techlogix.it" phone=""/>
+        <resource id="13" name="Edoardo Pesenti" function="Default:6" contacts="v.gallo@techlogix.it" phone=""/>
+        <resource id="14" name="alessio Piromalli" function="Default:7" contacts="r.mancini@techlogix.it" phone=""/>
+        <resource id="15" name="Federico Ravasio" function="Default:7" contacts="s.lombardi@techlogix.it" phone=""/>
+        <resource id="16" name="DAvide Suru" function="Default:7" contacts="a.martini@techlogix.it" phone=""/>
+        <resource id="17" name="Andrea Sorti" function="Default:8" contacts="f.russo@techlogix.it" phone=""/>
+        <resource id="18" name="Thomas tartari" function="Default:8" contacts="s.vitale@techlogix.it" phone=""/>
+    </resources>
+    <allocations>
+        <allocation task-id="2" resource-id="0" function="Default:1" responsible="true" load="100.0"/>
+        <allocation task-id="54" resource-id="0" function="Default:1" responsible="false" load="50.0"/>
+        <allocation task-id="66" resource-id="0" function="Default:1" responsible="true" load="100.0"/>
+        <allocation task-id="2" resource-id="1" function="Default:2" responsible="false" load="100.0"/>
+        <allocation task-id="16" resource-id="1" function="Default:2" responsible="false" load="50.0"/>
+        <allocation task-id="43" resource-id="1" function="Default:2" responsible="false" load="50.0"/>
+        <allocation task-id="54" resource-id="1" function="Default:2" responsible="false" load="100.0"/>
+        <allocation task-id="64" resource-id="1" function="Default:2" responsible="false" load="50.0"/>
+        <allocation task-id="2" resource-id="2" function="Default:2" responsible="false" load="100.0"/>
+        <allocation task-id="23" resource-id="2" function="Default:2" responsible="false" load="50.0"/>
+        <allocation task-id="26" resource-id="2" function="Default:2" responsible="false" load="50.0"/>
+        <allocation task-id="43" resource-id="2" function="Default:2" responsible="false" load="50.0"/>
+        <allocation task-id="54" resource-id="2" function="Default:2" responsible="false" load="100.0"/>
+        <allocation task-id="65" resource-id="2" function="Default:2" responsible="false" load="50.0"/>
+        <allocation task-id="3" resource-id="3" function="Default:3" responsible="true" load="100.0"/>
+        <allocation task-id="13" resource-id="3" function="Default:3" responsible="false" load="50.0"/>
+        <allocation task-id="31" resource-id="3" function="Default:3" responsible="false" load="100.0"/>
+        <allocation task-id="62" resource-id="3" function="Default:3" responsible="false" load="100.0"/>
+        <allocation task-id="3" resource-id="4" function="Default:3" responsible="false" load="100.0"/>
+        <allocation task-id="21" resource-id="4" function="Default:3" responsible="false" load="50.0"/>
+        <allocation task-id="33" resource-id="4" function="Default:3" responsible="false" load="50.0"/>
+        <allocation task-id="62" resource-id="4" function="Default:3" responsible="false" load="100.0"/>
+        <allocation task-id="3" resource-id="5" function="Default:4" responsible="false" load="50.0"/>
+        <allocation task-id="5" resource-id="5" function="Default:4" responsible="false" load="50.0"/>
+        <allocation task-id="11" resource-id="5" function="Default:4" responsible="true" load="100.0"/>
+        <allocation task-id="23" resource-id="5" function="Default:4" responsible="true" load="100.0"/>
+        <allocation task-id="31" resource-id="5" function="Default:4" responsible="true" load="100.0"/>
+        <allocation task-id="41" resource-id="5" function="Default:4" responsible="true" load="100.0"/>
+        <allocation task-id="51" resource-id="5" function="Default:4" responsible="false" load="50.0"/>
+        <allocation task-id="66" resource-id="5" function="Default:4" responsible="false" load="100.0"/>
+        <allocation task-id="11" resource-id="6" function="Default:4" responsible="false" load="100.0"/>
+        <allocation task-id="13" resource-id="6" function="Default:4" responsible="true" load="100.0"/>
+        <allocation task-id="21" resource-id="6" function="Default:4" responsible="true" load="100.0"/>
+        <allocation task-id="25" resource-id="6" function="Default:4" responsible="false" load="50.0"/>
+        <allocation task-id="41" resource-id="6" function="Default:4" responsible="false" load="100.0"/>
+        <allocation task-id="42" resource-id="6" function="Default:4" responsible="false" load="50.0"/>
+        <allocation task-id="55" resource-id="6" function="Default:4" responsible="false" load="100.0"/>
+        <allocation task-id="13" resource-id="7" function="Default:4" responsible="false" load="100.0"/>
+        <allocation task-id="15" resource-id="7" function="Default:4" responsible="true" load="100.0"/>
+        <allocation task-id="23" resource-id="7" function="Default:4" responsible="false" load="50.0"/>
+        <allocation task-id="33" resource-id="7" function="Default:4" responsible="true" load="100.0"/>
+        <allocation task-id="41" resource-id="7" function="Default:4" responsible="false" load="100.0"/>
+        <allocation task-id="44" resource-id="7" function="Default:4" responsible="false" load="50.0"/>
+        <allocation task-id="15" resource-id="8" function="Default:4" responsible="false" load="50.0"/>
+        <allocation task-id="16" resource-id="8" function="Default:4" responsible="true" load="100.0"/>
+        <allocation task-id="25" resource-id="8" function="Default:4" responsible="true" load="100.0"/>
+        <allocation task-id="33" resource-id="8" function="Default:4" responsible="false" load="100.0"/>
+        <allocation task-id="42" resource-id="8" function="Default:4" responsible="true" load="100.0"/>
+        <allocation task-id="53" resource-id="8" function="Default:4" responsible="false" load="50.0"/>
+        <allocation task-id="12" resource-id="9" function="Default:5" responsible="true" load="100.0"/>
+        <allocation task-id="22" resource-id="9" function="Default:5" responsible="true" load="100.0"/>
+        <allocation task-id="26" resource-id="9" function="Default:5" responsible="true" load="100.0"/>
+        <allocation task-id="32" resource-id="9" function="Default:5" responsible="true" load="100.0"/>
+        <allocation task-id="43" resource-id="9" function="Default:5" responsible="true" load="100.0"/>
+        <allocation task-id="52" resource-id="9" function="Default:5" responsible="false" load="50.0"/>
+        <allocation task-id="66" resource-id="9" function="Default:5" responsible="false" load="100.0"/>
+        <allocation task-id="12" resource-id="10" function="Default:5" responsible="false" load="100.0"/>
+        <allocation task-id="14" resource-id="10" function="Default:5" responsible="true" load="100.0"/>
+        <allocation task-id="24" resource-id="10" function="Default:5" responsible="true" load="100.0"/>
+        <allocation task-id="32" resource-id="10" function="Default:5" responsible="false" load="50.0"/>
+        <allocation task-id="34" resource-id="10" function="Default:5" responsible="true" load="100.0"/>
+        <allocation task-id="43" resource-id="10" function="Default:5" responsible="false" load="100.0"/>
+        <allocation task-id="14" resource-id="11" function="Default:5" responsible="false" load="100.0"/>
+        <allocation task-id="16" resource-id="11" function="Default:5" responsible="false" load="50.0"/>
+        <allocation task-id="24" resource-id="11" function="Default:5" responsible="false" load="100.0"/>
+        <allocation task-id="26" resource-id="11" function="Default:5" responsible="false" load="50.0"/>
+        <allocation task-id="34" resource-id="11" function="Default:5" responsible="false" load="100.0"/>
+        <allocation task-id="44" resource-id="11" function="Default:5" responsible="true" load="100.0"/>
+        <allocation task-id="55" resource-id="11" function="Default:5" responsible="false" load="100.0"/>
+        <allocation task-id="4" resource-id="12" function="Default:6" responsible="true" load="100.0"/>
+        <allocation task-id="5" resource-id="12" function="Default:6" responsible="true" load="100.0"/>
+        <allocation task-id="61" resource-id="12" function="Default:6" responsible="true" load="100.0"/>
+        <allocation task-id="66" resource-id="12" function="Default:6" responsible="false" load="100.0"/>
+        <allocation task-id="4" resource-id="13" function="Default:6" responsible="false" load="100.0"/>
+        <allocation task-id="61" resource-id="13" function="Default:6" responsible="false" load="100.0"/>
+        <allocation task-id="51" resource-id="14" function="Default:7" responsible="true" load="100.0"/>
+        <allocation task-id="52" resource-id="14" function="Default:7" responsible="true" load="100.0"/>
+        <allocation task-id="54" resource-id="14" function="Default:7" responsible="true" load="100.0"/>
+        <allocation task-id="63" resource-id="14" function="Default:7" responsible="false" load="50.0"/>
+        <allocation task-id="66" resource-id="14" function="Default:7" responsible="false" load="50.0"/>
+        <allocation task-id="51" resource-id="15" function="Default:7" responsible="false" load="100.0"/>
+        <allocation task-id="53" resource-id="15" function="Default:7" responsible="true" load="100.0"/>
+        <allocation task-id="55" resource-id="15" function="Default:7" responsible="true" load="100.0"/>
+        <allocation task-id="52" resource-id="16" function="Default:7" responsible="false" load="100.0"/>
+        <allocation task-id="53" resource-id="16" function="Default:7" responsible="false" load="100.0"/>
+        <allocation task-id="55" resource-id="16" function="Default:7" responsible="false" load="100.0"/>
+        <allocation task-id="64" resource-id="17" function="Default:8" responsible="true" load="100.0"/>
+        <allocation task-id="65" resource-id="17" function="Default:8" responsible="true" load="100.0"/>
+        <allocation task-id="66" resource-id="17" function="Default:8" responsible="false" load="50.0"/>
+        <allocation task-id="62" resource-id="18" function="Default:8" responsible="true" load="100.0"/>
+        <allocation task-id="63" resource-id="18" function="Default:8" responsible="true" load="100.0"/>
+        <allocation task-id="66" resource-id="18" function="Default:8" responsible="false" load="50.0"/>
+    </allocations>
+    <vacations/>
+    <previous/>
+    <roles roleset-name="Default"/>
+</project>
