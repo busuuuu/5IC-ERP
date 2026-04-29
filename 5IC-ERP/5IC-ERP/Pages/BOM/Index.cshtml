@@ -1,0 +1,63 @@
+﻿@page
+@model IndexModel
+
+@{
+    ViewData["Title"] = "Distinta Base ERP";
+}
+
+<div class="container mt-5">
+
+    <div class="card shadow-lg">
+
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">Sistema ERP - Distinta Base</h2>
+        </div>
+
+        <div class="card-body">
+
+            <h4 class="mb-4">Prodotto: Gateway X</h4>
+
+            <table class="table table-hover table-bordered">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>Componente</th>
+                        <th>Quantità Necessaria</th>
+                        <th>Disponibili</th>
+                        <th>Stato</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model.Riga)
+                    {
+                        <tr>
+                            <td>@item.Componente</td>
+                            <td>@item.Quantita</td>
+                            <td>@item.Giacenza</td>
+
+                            <td>
+                                @if (item.Giacenza >= item.Quantita)
+                                {
+                                    <span class="badge bg-success">OK</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Scorta Bassa</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+            <a asp-page="Verifica" class="btn btn-success btn-lg">
+                Verifica Produzione
+            </a>
+
+        </div>
+    </div>
+</div>

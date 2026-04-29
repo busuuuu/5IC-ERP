@@ -1,0 +1,64 @@
+﻿@page
+@model VerificaModel
+
+@{
+    ViewData["Title"] = "Verifica Produzione";
+}
+
+<div class="container mt-5">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-success text-white">
+            <h2>Verifica Produzione</h2>
+        </div>
+
+        <div class="card-body">
+
+            <form method="post">
+
+                <div class="mb-3">
+                    <label class="form-label">Quantità da produrre</label>
+                    <input asp-for="QuantitaDaProdurre" class="form-control" min="1" />
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    Controlla Disponibilità
+                </button>
+
+                <a asp-page="Index" class="btn btn-secondary ms-2">
+                    Torna Indietro
+                </a>
+
+            </form>
+
+            @if (!string.IsNullOrEmpty(Model.Risultato))
+            {
+                <hr />
+
+                @if (Model.ProduzioneOk)
+                {
+                    <div class="alert alert-success">
+                        <strong>@Model.Risultato</strong>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-danger">
+                        <strong>@Model.Risultato</strong>
+                    </div>
+                }
+
+                <ul class="list-group">
+
+                    @foreach (var item in Model.Dettagli)
+                    {
+                        <li class="list-group-item">@item</li>
+                    }
+
+                </ul>
+            }
+
+        </div>
+    </div>
+</div>
