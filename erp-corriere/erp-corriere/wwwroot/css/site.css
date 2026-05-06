@@ -1,0 +1,221 @@
+html {
+    font-size: 14px;
+    height: 100%;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 15px;
+    }
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #f5f6fa;
+    color: #2d3748;
+}
+
+/* ─── Navbar ──────────────────────────────────────────── */
+.navbar-brand {
+    font-size: 1.2rem;
+    letter-spacing: 0.02em;
+}
+
+/* ─── Cards ───────────────────────────────────────────── */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+}
+
+.card-header {
+    border-radius: 12px 12px 0 0 !important;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* ─── Page titles ─────────────────────────────────────── */
+.page-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 0;
+}
+
+.page-subtitle {
+    color: #718096;
+    font-size: 0.9rem;
+}
+
+/* ─── Table ───────────────────────────────────────────── */
+.table-main {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+}
+
+.table-main thead th {
+    background: #1a202c;
+    color: #e2e8f0;
+    font-weight: 600;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: none;
+    padding: 14px 16px;
+}
+
+.table-main tbody tr {
+    border-bottom: 1px solid #edf2f7;
+    transition: background 0.15s;
+}
+
+.table-main tbody tr:hover {
+    background: #f7fafc;
+}
+
+.table-main tbody td {
+    padding: 12px 16px;
+    vertical-align: middle;
+    border: none;
+    font-size: 0.9rem;
+}
+
+/* ─── Status badges ───────────────────────────────────── */
+.badge-stato {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.stato-preparazione { background: #fef3c7; color: #92400e; }
+.stato-spedita { background: #dbeafe; color: #1e40af; }
+.stato-consegna { background: #e0e7ff; color: #4338ca; }
+.stato-consegnata { background: #d1fae5; color: #065f46; }
+.stato-annullata { background: #fee2e2; color: #991b1b; }
+
+/* ─── Buttons ─────────────────────────────────────────── */
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.88rem;
+}
+
+.btn:focus, .btn:active:focus {
+    box-shadow: 0 0 0 0.15rem rgba(66,153,225,0.4);
+}
+
+.btn-action {
+    padding: 4px 12px;
+    font-size: 0.8rem;
+}
+
+/* ─── Forms ───────────────────────────────────────────── */
+.form-control, .form-select {
+    border-radius: 8px;
+    border-color: #e2e8f0;
+    font-size: 0.9rem;
+    padding: 8px 12px;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.15rem rgba(102,126,234,0.25);
+}
+
+.form-label {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #4a5568;
+    margin-bottom: 4px;
+}
+
+/* ─── Stats cards ─────────────────────────────────────── */
+.stat-card {
+    border-radius: 12px;
+    padding: 20px 24px;
+    color: white;
+    min-height: 100px;
+}
+
+.stat-card .stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.stat-card .stat-label {
+    font-size: 0.85rem;
+    opacity: 0.85;
+    margin-top: 4px;
+}
+
+.stat-card .stat-icon {
+    font-size: 2.5rem;
+    opacity: 0.3;
+}
+
+/* ─── Calculator ──────────────────────────────────────── */
+.calc-result {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    color: white;
+    padding: 24px;
+}
+
+.calc-result .result-label {
+    font-size: 0.8rem;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.calc-result .result-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+/* ─── Empty state ─────────────────────────────────────── */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #a0aec0;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    margin-bottom: 16px;
+}
+
+/* ─── Footer ──────────────────────────────────────────── */
+.footer {
+    margin-top: auto;
+}
+
+/* ─── Animations ──────────────────────────────────────── */
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Corriere badges ─────────────────────────────────── */
+.corriere-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: #edf2f7;
+    color: #4a5568;
+}

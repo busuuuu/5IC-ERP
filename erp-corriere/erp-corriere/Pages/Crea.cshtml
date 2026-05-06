@@ -1,0 +1,214 @@
+@page
+@model erp_corriere.Pages.CreaModel
+@{
+    ViewData["Title"] = "Nuova Spedizione";
+}
+
+<div class="d-flex align-items-center mb-4">
+    <a asp-page="Index" class="btn btn-outline-secondary btn-sm me-3">
+        <i class="fa-solid fa-arrow-left me-1"></i>Torna alla lista
+    </a>
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-plus-circle me-2 text-success"></i>Nuova Spedizione</h1>
+        <p class="page-subtitle mb-0">Registra una nuova spedizione nel sistema</p>
+    </div>
+</div>
+
+<form method="post">
+    <div class="row g-4">
+        <!-- LEFT COLUMN -->
+        <div class="col-lg-8">
+            <!-- Dati principali -->
+            <div class="card mb-4">
+                <div class="card-header bg-dark text-white d-flex align-items-center">
+                    <i class="fa-solid fa-circle-info me-2 text-warning"></i>Dati Principali
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label asp-for="Spedizione.Numero" class="form-label">N° Spedizione *</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-hashtag"></i></span>
+                                <input asp-for="Spedizione.Numero" class="form-control" placeholder="es. 100042" />
+                            </div>
+                            <span asp-validation-for="Spedizione.Numero" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Spedizione.Corriere" class="form-label">Corriere *</label>
+                            <select asp-for="Spedizione.Corriere" class="form-select">
+                                <option value="">-- Seleziona corriere --</option>
+                                <option>DHL</option><option>UPS</option><option>FedEx</option>
+                                <option>GLS</option><option>BRT</option><option>Poste Italiane</option>
+                                <option>Altri enti</option>
+                            </select>
+                            <span asp-validation-for="Spedizione.Corriere" class="text-danger small"></span>
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="Spedizione.Destinatario" class="form-label">Destinatario *</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                <input asp-for="Spedizione.Destinatario" class="form-control" placeholder="Nome e cognome / Azienda" />
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <label asp-for="Spedizione.Indirizzo" class="form-label">Indirizzo</label>
+                            <input asp-for="Spedizione.Indirizzo" class="form-control" placeholder="Via, numero civico" />
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="Spedizione.Citta" class="form-label">Città</label>
+                            <input asp-for="Spedizione.Citta" class="form-control" placeholder="Città" />
+                        </div>
+                        <div class="col-md-2">
+                            <label asp-for="Spedizione.Cap" class="form-label">CAP</label>
+                            <input asp-for="Spedizione.Cap" class="form-control" placeholder="00000" maxlength="5" />
+                            <span asp-validation-for="Spedizione.Cap" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stato e date -->
+            <div class="card mb-4">
+                <div class="card-header bg-dark text-white d-flex align-items-center">
+                    <i class="fa-solid fa-calendar-days me-2 text-warning"></i>Stato e Date
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label asp-for="Spedizione.Stato" class="form-label">Stato</label>
+                            <select asp-for="Spedizione.Stato" class="form-select">
+                                <option>In preparazione</option>
+                                <option>Spedita</option>
+                                <option>In consegna</option>
+                                <option>Consegnata</option>
+                                <option>Annullata</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="Spedizione.DataSpedizione" class="form-label">Data Spedizione</label>
+                            <input asp-for="Spedizione.DataSpedizione" type="date" class="form-control" />
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="Spedizione.DataArrivoPrevista" class="form-label">Arrivo Previsto</label>
+                            <input asp-for="Spedizione.DataArrivoPrevista" type="date" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Note -->
+            <div class="card mb-4">
+                <div class="card-header bg-dark text-white d-flex align-items-center">
+                    <i class="fa-solid fa-note-sticky me-2 text-warning"></i>Note
+                </div>
+                <div class="card-body">
+                    <textarea asp-for="Spedizione.Note" class="form-control" rows="3" placeholder="Note aggiuntive sulla spedizione..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="col-lg-4">
+            <!-- Collo -->
+            <div class="card mb-4">
+                <div class="card-header bg-dark text-white d-flex align-items-center">
+                    <i class="fa-solid fa-weight-hanging me-2 text-warning"></i>Collo
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label asp-for="Spedizione.PesoKg" class="form-label">Peso (kg)</label>
+                        <div class="input-group">
+                            <input asp-for="Spedizione.PesoKg" class="form-control" type="number" step="0.01" min="0.01" placeholder="0.00" id="pesoInput" />
+                            <span class="input-group-text">kg</span>
+                        </div>
+                        <span asp-validation-for="Spedizione.PesoKg" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-0">
+                        <label asp-for="Spedizione.Dimensioni" class="form-label">Dimensioni (cm)</label>
+                        <input asp-for="Spedizione.Dimensioni" class="form-control" placeholder="es. 30x20x15" />
+                        <small class="text-muted">Formato: LunghezzaxLarghezzaxAltezza</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calcolo Costo -->
+            <div class="card mb-4">
+                <div class="card-header bg-dark text-white d-flex align-items-center">
+                    <i class="fa-solid fa-euro-sign me-2 text-warning"></i>Costo Spedizione
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label asp-for="Spedizione.CostoNetto" class="form-label">Costo Netto (€)</label>
+                        <div class="input-group">
+                            <span class="input-group-text">€</span>
+                            <input asp-for="Spedizione.CostoNetto" class="form-control" type="number" step="0.01" min="0" placeholder="0.00" id="costoNettoInput" />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Spedizione.AliquotaIva" class="form-label">Aliquota IVA</label>
+                        <select asp-for="Spedizione.AliquotaIva" class="form-select" id="aliquotaIvaSelect">
+                            <option value="0">Esente IVA (0%)</option>
+                            <option value="4">4% - Ridotta</option>
+                            <option value="10">10% - Ridotta</option>
+                            <option value="22" selected>22% - Ordinaria</option>
+                        </select>
+                    </div>
+                    <!-- Riepilogo live -->
+                    <div class="calc-result mt-3">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="result-label">Imponibile</div>
+                                <div class="result-value fs-6" id="previewNetto">€ 0,00</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="result-label">IVA</div>
+                                <div class="result-value fs-6" id="previewIva">€ 0,00</div>
+                            </div>
+                        </div>
+                        <hr class="border-white opacity-25 my-2" />
+                        <div class="result-label">Totale da pagare</div>
+                        <div class="result-value" id="previewTotale">€ 0,00</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-success btn-lg">
+                    <i class="fa-solid fa-floppy-disk me-2"></i>Salva Spedizione
+                </button>
+                <a asp-page="Index" class="btn btn-outline-secondary">
+                    <i class="fa-solid fa-xmark me-2"></i>Annulla
+                </a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+    (function(){
+        const netto = document.getElementById('costoNettoInput');
+        const iva = document.getElementById('aliquotaIvaSelect');
+        const prevNetto = document.getElementById('previewNetto');
+        const prevIva = document.getElementById('previewIva');
+        const prevTotale = document.getElementById('previewTotale');
+
+        function fmt(v) { return '€ ' + v.toFixed(2).replace('.', ','); }
+
+        function update() {
+            const n = parseFloat(netto.value) || 0;
+            const p = parseInt(iva.value) || 0;
+            const ivaVal = n * p / 100;
+            const tot = n + ivaVal;
+            prevNetto.textContent = fmt(n);
+            prevIva.textContent = fmt(ivaVal);
+            prevTotale.textContent = fmt(tot);
+        }
+
+        netto.addEventListener('input', update);
+        iva.addEventListener('change', update);
+        update();
+    })();
+    </script>
+}

@@ -1,0 +1,312 @@
+@page
+@model erp_corriere.Pages.CalcoloCostoModel
+@{
+    ViewData["Title"] = "Calcola Costo Spedizione";
+}
+
+<div class="d-flex align-items-center mb-4">
+    <a asp-page="Index" class="btn btn-outline-secondary btn-sm me-3">
+        <i class="fa-solid fa-arrow-left me-1"></i>Torna alla lista
+    </a>
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-calculator me-2 text-warning"></i>Calcolatore Costo Spedizione</h1>
+        <p class="page-subtitle mb-0">Stima il costo di una spedizione con IVA inclusa</p>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Inputs -->
+    <div class="col-lg-5">
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                <i class="fa-solid fa-sliders me-2 text-warning"></i>Parametri Spedizione
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">Corriere</label>
+                    <select id="corriereSelect" class="form-select">
+                        <option value="">-- Seleziona corriere --</option>
+                        <option value="DHL">DHL</option>
+                        <option value="UPS">UPS</option>
+                        <option value="FedEx">FedEx</option>
+                        <option value="GLS">GLS</option>
+                        <option value="BRT">BRT</option>
+                        <option value="Poste Italiane">Poste Italiane</option>
+                        <option value="custom">Tariffa personalizzata</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Zona di destinazione</label>
+                    <select id="zonaSelect" class="form-select">
+                        <option value="nazionale">Nazionale (Italia)</option>
+                        <option value="europa">Europa</option>
+                        <option value="mondo">Resto del Mondo</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Peso (kg)</label>
+                    <div class="input-group">
+                        <input type="number" id="pesoKg" class="form-control" placeholder="0.00" step="0.1" min="0.1" value="1" />
+                        <span class="input-group-text">kg</span>
+                    </div>
+                </div>
+
+                <div class="row g-2 mb-3">
+                    <div class="col-12"><label class="form-label">Dimensioni collo (cm) <span class="text-muted small">— per peso volumetrico</span></label></div>
+                    <div class="col-4">
+                        <div class="input-group input-group-sm">
+                            <input type="number" id="dimL" class="form-control" placeholder="L" min="1" />
+                            <span class="input-group-text">L</span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="input-group input-group-sm">
+                            <input type="number" id="dimA" class="form-control" placeholder="A" min="1" />
+                            <span class="input-group-text">A</span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="input-group input-group-sm">
+                            <input type="number" id="dimP" class="form-control" placeholder="P" min="1" />
+                            <span class="input-group-text">P</span>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <small class="text-muted" id="pesoVolumetricoLabel">Peso volumetrico: —</small>
+                    </div>
+                </div>
+
+                <div class="mb-3" id="tariffaPersonalizzataRow" style="display:none">
+                    <label class="form-label">Tariffa base (€/kg)</label>
+                    <div class="input-group">
+                        <span class="input-group-text">€</span>
+                        <input type="number" id="tariffaCustom" class="form-control" placeholder="0.00" step="0.01" min="0" value="5" />
+                        <span class="input-group-text">/kg</span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Aliquota IVA</label>
+                    <select id="aliquotaIva" class="form-select">
+                        <option value="0">Esente IVA (0%)</option>
+                        <option value="4">4% - Ridotta</option>
+                        <option value="10">10% - Ridotta</option>
+                        <option value="22" selected>22% - Ordinaria</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Servizi aggiuntivi</label>
+                    <div class="form-check mb-1">
+                        <input class="form-check-input" type="checkbox" id="assicurazione" value="3.50">
+                        <label class="form-check-label" for="assicurazione">Assicurazione (+€ 3,50)</label>
+                    </div>
+                    <div class="form-check mb-1">
+                        <input class="form-check-input" type="checkbox" id="contrassegno" value="2.00">
+                        <label class="form-check-label" for="contrassegno">Contrassegno (+€ 2,00)</label>
+                    </div>
+                    <div class="form-check mb-1">
+                        <input class="form-check-input" type="checkbox" id="espresso" value="5.00">
+                        <label class="form-check-label" for="espresso">Consegna Espressa (+€ 5,00)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="firmaRitiro" value="1.50">
+                        <label class="form-check-label" for="firmaRitiro">Firma al ritiro (+€ 1,50)</label>
+                    </div>
+                </div>
+
+                <button class="btn btn-dark w-100" id="calcolaBtn">
+                    <i class="fa-solid fa-calculator me-2"></i>Calcola Costo
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results -->
+    <div class="col-lg-7">
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                <i class="fa-solid fa-receipt me-2 text-warning"></i>Riepilogo Costi
+            </div>
+            <div class="card-body" id="risultatoPanel">
+                <div class="empty-state py-4">
+                    <i class="fa-solid fa-calculator text-muted" style="font-size:3rem"></i>
+                    <p class="text-muted mt-3">Inserisci i parametri e premi "Calcola Costo"</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tariffe di riferimento -->
+        <div class="card">
+            <div class="card-header bg-light">
+                <i class="fa-solid fa-table me-2"></i>Tariffe Indicative per Corriere (€/kg, Nazionale)
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-sm mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Corriere</th>
+                            <th>Fino a 1kg</th>
+                            <th>1–5kg</th>
+                            <th>5–30kg</th>
+                            <th>Fattore vol.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><span class="corriere-badge">DHL</span></td><td>€ 6,90</td><td>€ 8,50</td><td>€ 12,00</td><td>1/5000</td></tr>
+                        <tr><td><span class="corriere-badge">UPS</span></td><td>€ 7,20</td><td>€ 9,00</td><td>€ 13,50</td><td>1/5000</td></tr>
+                        <tr><td><span class="corriere-badge">FedEx</span></td><td>€ 7,50</td><td>€ 9,50</td><td>€ 14,00</td><td>1/5000</td></tr>
+                        <tr><td><span class="corriere-badge">GLS</span></td><td>€ 5,50</td><td>€ 7,00</td><td>€ 10,00</td><td>1/4000</td></tr>
+                        <tr><td><span class="corriere-badge">BRT</span></td><td>€ 5,20</td><td>€ 6,80</td><td>€ 9,50</td><td>1/4000</td></tr>
+                        <tr><td><span class="corriere-badge">Poste Italiane</span></td><td>€ 4,80</td><td>€ 6,50</td><td>€ 9,00</td><td>1/4000</td></tr>
+                    </tbody>
+                </table>
+                <p class="text-muted small p-3 mb-0">* Tariffe indicative. Per prezzi esatti consultare i listini ufficiali dei corrieri.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+(function(){
+    // Tariffe base nazionali (€)
+    const tariffe = {
+        DHL:         { fino1: 6.90, fino5: 8.50, fino30: 12.00, fattoreVol: 5000, moltiplicatoreEU: 2.5, moltiplicatoreMondo: 5 },
+        UPS:         { fino1: 7.20, fino5: 9.00, fino30: 13.50, fattoreVol: 5000, moltiplicatoreEU: 2.5, moltiplicatoreMondo: 5 },
+        FedEx:       { fino1: 7.50, fino5: 9.50, fino30: 14.00, fattoreVol: 5000, moltiplicatoreEU: 2.8, moltiplicatoreMondo: 5.5 },
+        GLS:         { fino1: 5.50, fino5: 7.00, fino30: 10.00, fattoreVol: 4000, moltiplicatoreEU: 2.2, moltiplicatoreMondo: 4.5 },
+        BRT:         { fino1: 5.20, fino5: 6.80, fino30: 9.50,  fattoreVol: 4000, moltiplicatoreEU: 2.2, moltiplicatoreMondo: 4.5 },
+        "Poste Italiane": { fino1: 4.80, fino5: 6.50, fino30: 9.00, fattoreVol: 4000, moltiplicatoreEU: 2.0, moltiplicatoreMondo: 4 },
+    };
+
+    function fmt(v) { return '€ ' + v.toFixed(2).replace('.', ','); }
+
+    function getPesoEffettivo(pesoReale) {
+        const l = parseFloat(document.getElementById('dimL').value) || 0;
+        const a = parseFloat(document.getElementById('dimA').value) || 0;
+        const p = parseFloat(document.getElementById('dimP').value) || 0;
+        const corriere = document.getElementById('corriereSelect').value;
+        const fattore = tariffe[corriere]?.fattoreVol || 5000;
+        let pesoVol = 0;
+        if (l && a && p) {
+            pesoVol = (l * a * p) / fattore;
+            document.getElementById('pesoVolumetricoLabel').textContent =
+                `Peso volumetrico: ${pesoVol.toFixed(2)} kg (div. ${fattore}) — si fattura il maggiore`;
+        } else {
+            document.getElementById('pesoVolumetricoLabel').textContent = 'Peso volumetrico: —';
+        }
+        return Math.max(pesoReale, pesoVol);
+    }
+
+    function getTariffaBase(t, pesoEff, zona) {
+        let base;
+        if (pesoEff <= 1) base = t.fino1;
+        else if (pesoEff <= 5) base = t.fino5 + (pesoEff - 1) * 0.8;
+        else base = t.fino30 + (pesoEff - 5) * 0.5;
+        if (zona === 'europa') base *= t.moltiplicatoreEU;
+        if (zona === 'mondo') base *= t.moltiplicatoreMondo;
+        return base;
+    }
+
+    function calcola() {
+        const corriereVal = document.getElementById('corriereSelect').value;
+        const zona = document.getElementById('zonaSelect').value;
+        const pesoReale = parseFloat(document.getElementById('pesoKg').value) || 0;
+        const ivaPerc = parseInt(document.getElementById('aliquotaIva').value) || 0;
+
+        if (!corriereVal || pesoReale <= 0) {
+            alert('Seleziona un corriere e inserisci il peso.');
+            return;
+        }
+
+        const pesoEff = getPesoEffettivo(pesoReale);
+        let costoBase = 0;
+
+        if (corriereVal === 'custom') {
+            const tariffa = parseFloat(document.getElementById('tariffaCustom').value) || 0;
+            costoBase = tariffa * pesoEff;
+        } else {
+            const t = tariffe[corriereVal];
+            costoBase = getTariffaBase(t, pesoEff, zona);
+        }
+
+        // Servizi aggiuntivi
+        let extra = 0;
+        document.querySelectorAll('.form-check-input:checked').forEach(cb => {
+            extra += parseFloat(cb.value) || 0;
+        });
+
+        const netto = costoBase + extra;
+        const ivaImporto = netto * ivaPerc / 100;
+        const totale = netto + ivaImporto;
+
+        const zonaLabel = { nazionale: '🇮🇹 Nazionale', europa: '🇪🇺 Europa', mondo: '🌍 Resto del Mondo' }[zona];
+
+        document.getElementById('risultatoPanel').innerHTML = `
+        <div class="fade-in">
+            <div class="row g-3 mb-4">
+                <div class="col-sm-6">
+                    <div class="p-3 bg-light rounded">
+                        <div class="text-muted small">Corriere</div>
+                        <div class="fw-bold">${corriereVal === 'custom' ? 'Personalizzato' : corriereVal}</div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="p-3 bg-light rounded">
+                        <div class="text-muted small">Destinazione</div>
+                        <div class="fw-bold">${zonaLabel}</div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="p-3 bg-light rounded">
+                        <div class="text-muted small">Peso reale</div>
+                        <div class="fw-bold">${pesoReale.toFixed(2)} kg</div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="p-3 bg-light rounded">
+                        <div class="text-muted small">Peso fatturato</div>
+                        <div class="fw-bold">${pesoEff.toFixed(2)} kg</div>
+                    </div>
+                </div>
+            </div>
+
+            <table class="table table-sm mb-3">
+                <tr><td class="text-muted">Costo base spedizione</td><td class="text-end fw-semibold">${fmt(costoBase)}</td></tr>
+                ${extra > 0 ? `<tr><td class="text-muted">Servizi aggiuntivi</td><td class="text-end fw-semibold">${fmt(extra)}</td></tr>` : ''}
+                <tr class="border-top"><td class="text-muted fw-bold">Totale netto (imponibile)</td><td class="text-end fw-bold">${fmt(netto)}</td></tr>
+                <tr><td class="text-muted">IVA ${ivaPerc}%</td><td class="text-end">${fmt(ivaImporto)}</td></tr>
+            </table>
+
+            <div class="calc-result">
+                <div class="result-label">TOTALE DA PAGARE (IVA inclusa)</div>
+                <div class="result-value mt-1">${fmt(totale)}</div>
+            </div>
+
+            <p class="text-muted small mt-3 mb-0">
+                <i class="fa-solid fa-circle-info me-1"></i>
+                Calcolo basato su tariffe indicative. Per preventivi precisi, contattare direttamente il corriere.
+            </p>
+        </div>`;
+    }
+
+    document.getElementById('calcolaBtn').addEventListener('click', calcola);
+
+    document.getElementById('corriereSelect').addEventListener('change', function(){
+        const custom = document.getElementById('tariffaPersonalizzataRow');
+        custom.style.display = this.value === 'custom' ? 'block' : 'none';
+    });
+
+    // Aggiorna peso volumetrico in tempo reale
+    ['dimL','dimA','dimP','pesoKg'].forEach(id => {
+        document.getElementById(id).addEventListener('input', function(){
+            const pesoReale = parseFloat(document.getElementById('pesoKg').value) || 0;
+            getPesoEffettivo(pesoReale);
+        });
+    });
+})();
+</script>
+}

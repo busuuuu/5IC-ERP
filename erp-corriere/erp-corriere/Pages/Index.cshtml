@@ -1,0 +1,250 @@
+@page
+@model erp_corriere.Pages.IndexModel
+@{
+    ViewData["Title"] = "Gestione Spedizioni";
+    var totale = Model.Spedizioni.Count;
+    var inConsegna = Model.Spedizioni.Count(s => s.Stato == "In consegna");
+    var consegnate = Model.Spedizioni.Count(s => s.Stato == "Consegnata");
+    var inPrep = Model.Spedizioni.Count(s => s.Stato == "In preparazione");
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 fade-in">
+    <div>
+        <h1 class="page-title"><i class="fa-solid fa-boxes-stacked me-2 text-warning"></i>Gestione Spedizioni</h1>
+        <p class="page-subtitle mb-0">Monitora e gestisci tutte le spedizioni</p>
+    </div>
+    <a asp-page="Crea" class="btn btn-dark px-4">
+        <i class="fa-solid fa-plus me-2"></i>Nuova Spedizione
+    </a>
+</div>
+
+<!-- Stats -->
+<div class="row g-3 mb-4 fade-in">
+    <div class="col-6 col-md-3">
+        <div class="stat-card" style="background: linear-gradient(135deg,#667eea,#764ba2)">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <div class="stat-value">@totale</div>
+                    <div class="stat-label">Totale Spedizioni</div>
+                </div>
+                <i class="fa-solid fa-truck stat-icon"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-card" style="background: linear-gradient(135deg,#f093fb,#f5576c)">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <div class="stat-value">@inPrep</div>
+                    <div class="stat-label">In Preparazione</div>
+                </div>
+                <i class="fa-solid fa-box stat-icon"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-card" style="background: linear-gradient(135deg,#4facfe,#00f2fe)">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <div class="stat-value">@inConsegna</div>
+                    <div class="stat-label">In Consegna</div>
+                </div>
+                <i class="fa-solid fa-truck-fast stat-icon"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-card" style="background: linear-gradient(135deg,#43e97b,#38f9d7)">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <div class="stat-value">@consegnate</div>
+                    <div class="stat-label">Consegnate</div>
+                </div>
+                <i class="fa-solid fa-circle-check stat-icon"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filter bar -->
+<div class="card mb-3 fade-in">
+    <div class="card-body py-2 px-3">
+        <div class="row align-items-center g-2">
+            <div class="col-md-4">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-white border-end-0"><i class="fa-solid fa-search text-muted"></i></span>
+                    <input type="text" id="searchInput" class="form-control border-start-0 ps-0" placeholder="Cerca destinatario, numero, città..." />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select id="filterStato" class="form-select form-select-sm">
+                    <option value="">Tutti gli stati</option>
+                    <option>In preparazione</option>
+                    <option>Spedita</option>
+                    <option>In consegna</option>
+                    <option>Consegnata</option>
+                    <option>Annullata</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select id="filterCorriere" class="form-select form-select-sm">
+                    <option value="">Tutti i corrieri</option>
+                    <option>DHL</option><option>UPS</option><option>FedEx</option>
+                    <option>GLS</option><option>BRT</option><option>Poste Italiane</option>
+                </select>
+            </div>
+            <div class="col-md-2 text-end">
+                <span class="text-muted small" id="countLabel">@totale spedizioni</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Table -->
+@if (!Model.Spedizioni.Any())
+{
+    <div class="card fade-in">
+        <div class="empty-state">
+            <i class="fa-solid fa-truck-fast"></i>
+            <h5 class="text-muted">Nessuna spedizione registrata</h5>
+            <p class="text-muted small">Crea la tua prima spedizione per iniziare</p>
+            <a asp-page="Crea" class="btn btn-dark mt-2"><i class="fa-solid fa-plus me-2"></i>Nuova Spedizione</a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="table-main fade-in">
+        <table class="table mb-0" id="mainTable">
+            <thead>
+                <tr>
+                    <th>N°</th>
+                    <th>Destinatario</th>
+                    <th>Città / CAP</th>
+                    <th>Corriere</th>
+                    <th>Stato</th>
+                    <th>Data Sped.</th>
+                    <th>Arrivo Previsto</th>
+                    <th>Peso</th>
+                    <th>Costo Totale</th>
+                    <th class="text-center">Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var s in Model.Spedizioni)
+                {
+                    var statoClass = s.Stato switch {
+                        "In preparazione" => "stato-preparazione",
+                        "Spedita" => "stato-spedita",
+                        "In consegna" => "stato-consegna",
+                        "Consegnata" => "stato-consegnata",
+                        "Annullata" => "stato-annullata",
+                        _ => ""
+                    };
+                    var statoIcon = s.Stato switch {
+                        "In preparazione" => "fa-box",
+                        "Spedita" => "fa-paper-plane",
+                        "In consegna" => "fa-truck-fast",
+                        "Consegnata" => "fa-circle-check",
+                        "Annullata" => "fa-ban",
+                        _ => "fa-circle"
+                    };
+                    <tr data-stato="@s.Stato" data-corriere="@s.Corriere" data-search="@(s.Numero + s.Destinatario + s.Citta).ToLower()">
+                        <td><code class="text-dark fw-bold">#@s.Numero</code></td>
+                        <td>
+                            <div class="fw-semibold">@s.Destinatario</div>
+                            @if (!string.IsNullOrEmpty(s.Indirizzo))
+                            {
+                                <div class="text-muted small">@s.Indirizzo</div>
+                            }
+                        </td>
+                        <td>
+                            @s.Citta
+                            @if (!string.IsNullOrEmpty(s.Cap))
+                            {
+                                <span class="text-muted small ms-1">@s.Cap</span>
+                            }
+                        </td>
+                        <td><span class="corriere-badge"><i class="fa-solid fa-truck me-1"></i>@s.Corriere</span></td>
+                        <td>
+                            <span class="badge-stato @statoClass">
+                                <i class="fa-solid @statoIcon me-1"></i>@s.Stato
+                            </span>
+                        </td>
+                        <td>@s.DataSpedizione.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            @if (s.DataArrivoPrevista.HasValue)
+                            {
+                                var giorni = (s.DataArrivoPrevista.Value - DateTime.Today).Days;
+                                if (giorni < 0 && s.Stato != "Consegnata" && s.Stato != "Annullata")
+                                {
+                                    <span class="text-danger fw-semibold"><i class="fa-solid fa-triangle-exclamation me-1"></i>@s.DataArrivoPrevista.Value.ToString("dd/MM/yyyy")</span>
+                                }
+                                else
+                                {
+                                    <span>@s.DataArrivoPrevista.Value.ToString("dd/MM/yyyy")</span>
+                                }
+                            }
+                            else { <span class="text-muted">—</span> }
+                        </td>
+                        <td>
+                            @if (s.PesoKg.HasValue)
+                            {
+                                <span class="text-muted small">@s.PesoKg.Value.ToString("0.##") kg</span>
+                            }
+                            else { <span class="text-muted">—</span> }
+                        </td>
+                        <td>
+                            @if (s.CostoNetto.HasValue)
+                            {
+                                <div class="fw-semibold text-dark">€ @s.CostoTotale.ToString("0.00")</div>
+                                <div class="text-muted small">IVA @s.AliquotaIva%</div>
+                            }
+                            else { <span class="text-muted">—</span> }
+                        </td>
+                        <td class="text-center">
+                            <a asp-page="Modifica" asp-route-id="@s.Id" class="btn btn-outline-secondary btn-action me-1">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+                            <a asp-page="Elimina" asp-route-id="@s.Id" class="btn btn-outline-danger btn-action">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@section Scripts {
+<script>
+(function(){
+    const searchInput = document.getElementById('searchInput');
+    const filterStato = document.getElementById('filterStato');
+    const filterCorriere = document.getElementById('filterCorriere');
+    const countLabel = document.getElementById('countLabel');
+    const rows = document.querySelectorAll('#mainTable tbody tr');
+
+    function applyFilters() {
+        const search = searchInput.value.toLowerCase();
+        const stato = filterStato.value;
+        const corriere = filterCorriere.value;
+        let visible = 0;
+        rows.forEach(row => {
+            const matchSearch = !search || row.dataset.search.includes(search);
+            const matchStato = !stato || row.dataset.stato === stato;
+            const matchCorriere = !corriere || row.dataset.corriere === corriere;
+            const show = matchSearch && matchStato && matchCorriere;
+            row.style.display = show ? '' : 'none';
+            if (show) visible++;
+        });
+        countLabel.textContent = visible + ' spedizioni';
+    }
+
+    searchInput?.addEventListener('input', applyFilters);
+    filterStato?.addEventListener('change', applyFilters);
+    filterCorriere?.addEventListener('change', applyFilters);
+})();
+</script>
+}

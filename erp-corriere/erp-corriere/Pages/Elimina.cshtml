@@ -1,0 +1,53 @@
+@page
+@model erp_corriere.Pages.EliminaModel
+@{
+    ViewData["Title"] = "Elimina Spedizione";
+}
+
+<div class="d-flex align-items-center mb-4">
+    <a asp-page="Index" class="btn btn-outline-secondary btn-sm me-3">
+        <i class="fa-solid fa-arrow-left me-1"></i>Torna alla lista
+    </a>
+    <div>
+        <h1 class="page-title text-danger"><i class="fa-solid fa-triangle-exclamation me-2"></i>Elimina Spedizione</h1>
+        <p class="page-subtitle mb-0">Questa operazione non può essere annullata</p>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <i class="fa-solid fa-trash me-2"></i>Conferma Eliminazione
+            </div>
+            <div class="card-body">
+                <div class="alert alert-danger d-flex align-items-center">
+                    <i class="fa-solid fa-circle-exclamation me-3 fs-4"></i>
+                    <div>Sei sicuro di voler eliminare definitivamente questa spedizione?</div>
+                </div>
+
+                <table class="table table-sm">
+                    <tr><th class="w-40 text-muted">N° Spedizione</th><td><strong>#@Model.Spedizione.Numero</strong></td></tr>
+                    <tr><th class="text-muted">Destinatario</th><td>@Model.Spedizione.Destinatario</td></tr>
+                    <tr><th class="text-muted">Città</th><td>@Model.Spedizione.Citta</td></tr>
+                    <tr><th class="text-muted">Corriere</th><td>@Model.Spedizione.Corriere</td></tr>
+                    <tr><th class="text-muted">Stato</th><td>@Model.Spedizione.Stato</td></tr>
+                    @if (Model.Spedizione.CostoNetto.HasValue)
+                    {
+                        <tr><th class="text-muted">Costo Totale</th><td class="fw-bold">€ @Model.Spedizione.CostoTotale.ToString("0.00")</td></tr>
+                    }
+                </table>
+
+                <form method="post" class="d-flex gap-2 mt-3">
+                    <input type="hidden" asp-for="Spedizione.Id" />
+                    <button type="submit" class="btn btn-danger flex-grow-1">
+                        <i class="fa-solid fa-trash me-2"></i>Sì, elimina definitivamente
+                    </button>
+                    <a asp-page="Index" class="btn btn-outline-secondary flex-grow-1">
+                        <i class="fa-solid fa-xmark me-2"></i>Annulla
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
