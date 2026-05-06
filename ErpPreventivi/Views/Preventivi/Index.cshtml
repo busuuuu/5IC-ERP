@@ -1,0 +1,112 @@
+@model List<Preventivo>
+@{
+    ViewData["Title"] = "Preventivi";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-file-earmark-text me-2"></i>Preventivi</h2>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-1"></i>Nuovo Preventivo
+    </a>
+</div>
+
+@* ── Barra di ricerca e filtro ── *@
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-5">
+        <input type="text" name="cerca" value="@ViewBag.Cerca"
+               class="form-control" placeholder="Cerca per cliente o numero..." />
+    </div>
+    <div class="col-md-3">
+        <select name="stato" class="form-select">
+            <option value="">-- Tutti gli stati --</option>
+            @foreach (var s in Enum.GetValues<StatoPreventivo>())
+            {
+                <option value="@s" selected="@(ViewBag.StatoFiltro?.ToString() == s.ToString())">@s</option>
+            }
+        </select>
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-outline-secondary">
+            <i class="bi bi-search me-1"></i>Filtra
+        </button>
+        <a asp-action="Index" class="btn btn-outline-danger ms-1">
+            <i class="bi bi-x"></i>
+        </a>
+    </div>
+</form>
+
+@* ── Tabella preventivi ── *@
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        <i class="bi bi-info-circle me-2"></i>Nessun preventivo trovato.
+        <a asp-action="Create" class="alert-link">Crea il primo preventivo.</a>
+    </div>
+}
+else
+{
+    <div class="card shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>N° Preventivo</th>
+                        <th>Cliente</th>
+                        <th>Data</th>
+                        <th>Scadenza</th>
+                        <th class="text-end">Totale (IVA incl.)</th>
+                        <th class="text-center">Stato</th>
+                        <th class="text-center">Azioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in Model)
+                    {
+                        <tr>
+                            <td><strong>@p.Numero</strong></td>
+                            <td>@p.Cliente</td>
+                            <td>@p.DataCreazione.ToString("dd/MM/yyyy")</td>
+                            <td>
+                                @if (p.DataScadenza.HasValue)
+                                {
+                                    var scaduto = p.DataScadenza < DateTime.Today && p.Stato == StatoPreventivo.Inviato;
+                                    <span class="@(scaduto ? "text-danger fw-bold" : "")">
+                                        @p.DataScadenza.Value.ToString("dd/MM/yyyy")
+                                        @if (scaduto) { <i class="bi bi-exclamation-triangle ms-1"></i> }
+                                    </span>
+                                }
+                            </td>
+                            <td class="text-end fw-bold">€ @p.TotaleConIva.ToString("N2")</td>
+                            <td class="text-center">
+                                <span class="badge badge-@p.Stato">@p.Stato</span>
+                            </td>
+                            <td class="text-center">
+                                <a asp-action="Details" asp-route-id="@p.Id"
+                                   class="btn btn-sm btn-outline-primary" title="Dettagli">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@p.Id"
+                                   class="btn btn-sm btn-outline-warning ms-1" title="Modifica">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <form asp-action="Delete" asp-route-id="@p.Id"
+                                      method="post" style="display:inline"
+                                      onsubmit="return confirm('Eliminare il preventivo @p.Numero?')">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-outline-danger ms-1" title="Elimina">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <p class="text-muted mt-2 small">
+        Totale: <strong>@Model.Count</strong> preventivi |
+        Valore complessivo: <strong>€ @Model.Sum(p => p.TotaleConIva).ToString("N2")</strong>
+    </p>
+}

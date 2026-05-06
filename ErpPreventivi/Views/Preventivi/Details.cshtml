@@ -1,0 +1,153 @@
+@model Preventivo
+@{
+    ViewData["Title"] = $"Preventivo {Model.Numero}";
+
+    string BadgeClass(StatoPreventivo s) => s switch {
+        StatoPreventivo.Bozza     => "bg-secondary",
+        StatoPreventivo.Inviato   => "bg-primary",
+        StatoPreventivo.Accettato => "bg-success",
+        StatoPreventivo.Rifiutato => "bg-danger",
+        _                         => "bg-secondary"
+    };
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="mb-0">
+            <i class="bi bi-file-earmark-text me-2"></i>@Model.Numero
+            <span class="badge @BadgeClass(Model.Stato) ms-2">@Model.Stato</span>
+        </h2>
+        <small class="text-muted">Cliente: <strong>@Model.Cliente</strong></small>
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning me-2">
+            <i class="bi bi-pencil me-1"></i>Modifica
+        </a>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i>Lista
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    @* ── Colonna sinistra: informazioni ── *@
+    <div class="col-md-8">
+
+        @* Info generali *@
+        <div class="card shadow-sm mb-4">
+            <div class="card-header"><i class="bi bi-info-circle me-2"></i>Informazioni</div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Cliente</dt>
+                    <dd class="col-sm-8">@Model.Cliente</dd>
+
+                    @if (!string.IsNullOrEmpty(Model.EmailCliente))
+                    {
+                        <dt class="col-sm-4">Email</dt>
+                        <dd class="col-sm-8"><a href="mailto:@Model.EmailCliente">@Model.EmailCliente</a></dd>
+                    }
+
+                    <dt class="col-sm-4">Data Creazione</dt>
+                    <dd class="col-sm-8">@Model.DataCreazione.ToString("dd MMMM yyyy")</dd>
+
+                    @if (Model.DataScadenza.HasValue)
+                    {
+                        <dt class="col-sm-4">Scadenza</dt>
+                        <dd class="col-sm-8">@Model.DataScadenza.Value.ToString("dd MMMM yyyy")</dd>
+                    }
+
+                    @if (!string.IsNullOrEmpty(Model.Note))
+                    {
+                        <dt class="col-sm-4">Note</dt>
+                        <dd class="col-sm-8" style="white-space:pre-line">@Model.Note</dd>
+                    }
+                </dl>
+            </div>
+        </div>
+
+        @* Righe *@
+        <div class="card shadow-sm">
+            <div class="card-header"><i class="bi bi-list-ol me-2"></i>Righe Preventivo</div>
+            <div class="table-responsive">
+                <table class="table table-striped mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Descrizione</th>
+                            <th class="text-center">Qtà</th>
+                            <th class="text-end">Prezzo Unit.</th>
+                            <th class="text-end">Totale Riga</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Righe.Count; i++)
+                        {
+                            var riga = Model.Righe[i];
+                            <tr>
+                                <td class="text-muted">@(i + 1)</td>
+                                <td>@riga.Descrizione</td>
+                                <td class="text-center">@riga.Quantita.ToString("G")</td>
+                                <td class="text-end">€ @riga.PrezzoUnitario.ToString("N2")</td>
+                                <td class="text-end fw-bold">€ @riga.Totale.ToString("N2")</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot class="table-light">
+                        <tr>
+                            <td colspan="4" class="text-end">Imponibile</td>
+                            <td class="text-end fw-bold">€ @Model.Imponibile.ToString("N2")</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="text-end text-muted">IVA 22%</td>
+                            <td class="text-end text-muted">€ @Model.Iva.ToString("N2")</td>
+                        </tr>
+                        <tr class="table-success">
+                            <td colspan="4" class="text-end fs-5 fw-bold">Totale</td>
+                            <td class="text-end fs-5 fw-bold">€ @Model.TotaleConIva.ToString("N2")</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    @* ── Colonna destra: azioni ── *@
+    <div class="col-md-4">
+
+        @* Cambio stato rapido *@
+        <div class="card shadow-sm mb-3">
+            <div class="card-header"><i class="bi bi-arrow-left-right me-2"></i>Cambio Stato</div>
+            <div class="card-body">
+                <p class="text-muted small mb-3">Stato attuale: <strong>@Model.Stato</strong></p>
+                @foreach (var stato in Enum.GetValues<StatoPreventivo>())
+                {
+                    if (stato != Model.Stato)
+                    {
+                        <form asp-action="CambiaStato" method="post" class="mb-2">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <input type="hidden" name="nuovoStato" value="@stato" />
+                            <button type="submit" class="btn btn-outline-secondary btn-sm w-100">
+                                → Segna come <strong>@stato</strong>
+                            </button>
+                        </form>
+                    }
+                }
+            </div>
+        </div>
+
+        @* Elimina *@
+        <div class="card shadow-sm border-danger">
+            <div class="card-header text-danger"><i class="bi bi-trash me-2"></i>Zona Pericolosa</div>
+            <div class="card-body">
+                <form asp-action="Delete" asp-route-id="@Model.Id" method="post"
+                      onsubmit="return confirm('Sei sicuro di voler eliminare il preventivo @Model.Numero?')">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-outline-danger w-100">
+                        <i class="bi bi-trash me-2"></i>Elimina Preventivo
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

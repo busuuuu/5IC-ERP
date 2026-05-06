@@ -1,0 +1,195 @@
+@model Preventivo
+@{
+    ViewData["Title"] = "Nuovo Preventivo";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-plus-circle me-2"></i>Nuovo Preventivo</h2>
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i>Torna alla lista
+    </a>
+</div>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="row g-4">
+        @* ── Dati principali ── *@
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <i class="bi bi-info-circle me-2"></i>Dati Preventivo
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label asp-for="Numero" class="form-label fw-bold"></label>
+                            <input asp-for="Numero" class="form-control" />
+                            <span asp-validation-for="Numero" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="DataCreazione" class="form-label fw-bold"></label>
+                            <input asp-for="DataCreazione" class="form-control" type="date" />
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="DataScadenza" class="form-label fw-bold"></label>
+                            <input asp-for="DataScadenza" class="form-control" type="date" />
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Cliente" class="form-label fw-bold"></label>
+                            <input asp-for="Cliente" class="form-control" placeholder="Nome cliente o azienda" />
+                            <span asp-validation-for="Cliente" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="EmailCliente" class="form-label fw-bold"></label>
+                            <input asp-for="EmailCliente" class="form-control" placeholder="email@esempio.com" />
+                            <span asp-validation-for="EmailCliente" class="text-danger small"></span>
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="Note" class="form-label fw-bold"></label>
+                            <textarea asp-for="Note" class="form-control" rows="3"
+                                      placeholder="Note aggiuntive, condizioni, tempi di consegna..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @* ── Righe preventivo ── *@
+            <div class="card shadow-sm mt-4">
+                <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-list-ol me-2"></i>Righe Preventivo</span>
+                    <button type="button" class="btn btn-light btn-sm" onclick="aggiungiRiga()">
+                        <i class="bi bi-plus me-1"></i>Aggiungi riga
+                    </button>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table mb-0" id="tabellaRighe">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width:50%">Descrizione</th>
+                                <th style="width:15%" class="text-center">Quantità</th>
+                                <th style="width:20%" class="text-end">Prezzo Unit. (€)</th>
+                                <th style="width:10%" class="text-end">Totale</th>
+                                <th style="width:5%"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="righeBody">
+                            @* Riga iniziale *@
+                            <tr class="riga-preventivo">
+                                <td><input type="text" name="rigaDescrizione" class="form-control form-control-sm" placeholder="Descrizione prodotto/servizio" /></td>
+                                <td><input type="number" name="rigaQuantita" class="form-control form-control-sm text-center qta" value="1" min="0.01" step="0.01" /></td>
+                                <td><input type="number" name="rigaPrezzo" class="form-control form-control-sm text-end prezzo" value="0" min="0" step="0.01" /></td>
+                                <td class="text-end align-middle fw-bold totale-riga">€ 0,00</td>
+                                <td class="text-center align-middle">
+                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="rimuoviRiga(this)">
+                                        <i class="bi bi-x"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="row justify-content-end text-end">
+                        <div class="col-md-4">
+                            <div class="d-flex justify-content-between">
+                                <span>Imponibile:</span>
+                                <strong id="totImponibile">€ 0,00</strong>
+                            </div>
+                            <div class="d-flex justify-content-between text-muted">
+                                <span>IVA 22%:</span>
+                                <span id="totIva">€ 0,00</span>
+                            </div>
+                            <hr class="my-1">
+                            <div class="d-flex justify-content-between fs-5">
+                                <span class="fw-bold">Totale:</span>
+                                <strong id="totFinale" class="text-primary">€ 0,00</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* ── Stato + salvataggio ── *@
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <i class="bi bi-gear me-2"></i>Impostazioni
+                </div>
+                <div class="card-body">
+                    <label asp-for="Stato" class="form-label fw-bold"></label>
+                    <select asp-for="Stato" class="form-select"
+                            asp-items="Html.GetEnumSelectList<StatoPreventivo>()"></select>
+
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="bi bi-save me-2"></i>Salva Preventivo
+                        </button>
+                    </div>
+                    <a asp-action="Index" class="btn btn-outline-secondary w-100 mt-2">Annulla</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+<script>
+// ── Template HTML per una nuova riga ──
+function nuovaRigaHtml() {
+    return `<tr class="riga-preventivo">
+        <td><input type="text" name="rigaDescrizione" class="form-control form-control-sm" placeholder="Descrizione prodotto/servizio" /></td>
+        <td><input type="number" name="rigaQuantita" class="form-control form-control-sm text-center qta" value="1" min="0.01" step="0.01" /></td>
+        <td><input type="number" name="rigaPrezzo" class="form-control form-control-sm text-end prezzo" value="0" min="0" step="0.01" /></td>
+        <td class="text-end align-middle fw-bold totale-riga">€ 0,00</td>
+        <td class="text-center align-middle">
+            <button type="button" class="btn btn-outline-danger btn-sm" onclick="rimuoviRiga(this)">
+                <i class="bi bi-x"></i>
+            </button>
+        </td>
+    </tr>`;
+}
+
+function aggiungiRiga() {
+    document.getElementById('righeBody').insertAdjacentHTML('beforeend', nuovaRigaHtml());
+    aggiornaEventi();
+}
+
+function rimuoviRiga(btn) {
+    const righe = document.querySelectorAll('.riga-preventivo');
+    if (righe.length > 1) {
+        btn.closest('tr').remove();
+        aggiornaTotali();
+    } else {
+        alert('Deve esserci almeno una riga.');
+    }
+}
+
+function aggiornaTotali() {
+    let imponibile = 0;
+    document.querySelectorAll('.riga-preventivo').forEach(riga => {
+        const qta   = parseFloat(riga.querySelector('.qta').value)    || 0;
+        const prez  = parseFloat(riga.querySelector('.prezzo').value) || 0;
+        const tot   = qta * prez;
+        riga.querySelector('.totale-riga').textContent = '€ ' + tot.toLocaleString('it-IT', {minimumFractionDigits: 2});
+        imponibile += tot;
+    });
+    const iva     = imponibile * 0.22;
+    const totale  = imponibile + iva;
+    const fmt = v => '€ ' + v.toLocaleString('it-IT', {minimumFractionDigits: 2});
+    document.getElementById('totImponibile').textContent = fmt(imponibile);
+    document.getElementById('totIva').textContent        = fmt(iva);
+    document.getElementById('totFinale').textContent     = fmt(totale);
+}
+
+function aggiornaEventi() {
+    document.querySelectorAll('.qta, .prezzo').forEach(input => {
+        input.oninput = aggiornaTotali;
+    });
+}
+
+// Inizializzazione
+aggiornaEventi();
+</script>
+}

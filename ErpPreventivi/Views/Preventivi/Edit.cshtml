@@ -1,0 +1,193 @@
+@model Preventivo
+@{
+    ViewData["Title"] = "Modifica Preventivo";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-pencil me-2"></i>Modifica — @Model.Numero</h2>
+    <div>
+        <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-primary me-2">
+            <i class="bi bi-eye me-1"></i>Visualizza
+        </a>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i>Lista
+        </a>
+    </div>
+</div>
+
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+
+    <div class="row g-4">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning text-dark">
+                    <i class="bi bi-info-circle me-2"></i>Dati Preventivo
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label asp-for="Numero" class="form-label fw-bold"></label>
+                            <input asp-for="Numero" class="form-control" />
+                            <span asp-validation-for="Numero" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="DataCreazione" class="form-label fw-bold"></label>
+                            <input asp-for="DataCreazione" class="form-control" type="date" />
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="DataScadenza" class="form-label fw-bold"></label>
+                            <input asp-for="DataScadenza" class="form-control" type="date" />
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Cliente" class="form-label fw-bold"></label>
+                            <input asp-for="Cliente" class="form-control" />
+                            <span asp-validation-for="Cliente" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="EmailCliente" class="form-label fw-bold"></label>
+                            <input asp-for="EmailCliente" class="form-control" />
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="Note" class="form-label fw-bold"></label>
+                            <textarea asp-for="Note" class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @* Righe *@
+            <div class="card shadow-sm mt-4">
+                <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-list-ol me-2"></i>Righe Preventivo</span>
+                    <button type="button" class="btn btn-light btn-sm" onclick="aggiungiRiga()">
+                        <i class="bi bi-plus me-1"></i>Aggiungi riga
+                    </button>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table mb-0" id="tabellaRighe">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width:50%">Descrizione</th>
+                                <th style="width:15%" class="text-center">Quantità</th>
+                                <th style="width:20%" class="text-end">Prezzo Unit. (€)</th>
+                                <th style="width:10%" class="text-end">Totale</th>
+                                <th style="width:5%"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="righeBody">
+                            @foreach (var riga in Model.Righe)
+                            {
+                                <tr class="riga-preventivo">
+                                    <td><input type="text" name="rigaDescrizione" class="form-control form-control-sm" value="@riga.Descrizione" /></td>
+                                    <td><input type="number" name="rigaQuantita" class="form-control form-control-sm text-center qta" value="@riga.Quantita.ToString("G")" min="0.01" step="0.01" /></td>
+                                    <td><input type="number" name="rigaPrezzo" class="form-control form-control-sm text-end prezzo" value="@riga.PrezzoUnitario.ToString("G")" min="0" step="0.01" /></td>
+                                    <td class="text-end align-middle fw-bold totale-riga">€ @riga.Totale.ToString("N2")</td>
+                                    <td class="text-center align-middle">
+                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="rimuoviRiga(this)">
+                                            <i class="bi bi-x"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="row justify-content-end text-end">
+                        <div class="col-md-4">
+                            <div class="d-flex justify-content-between">
+                                <span>Imponibile:</span>
+                                <strong id="totImponibile">€ @Model.Imponibile.ToString("N2")</strong>
+                            </div>
+                            <div class="d-flex justify-content-between text-muted">
+                                <span>IVA 22%:</span>
+                                <span id="totIva">€ @Model.Iva.ToString("N2")</span>
+                            </div>
+                            <hr class="my-1">
+                            <div class="d-flex justify-content-between fs-5">
+                                <span class="fw-bold">Totale:</span>
+                                <strong id="totFinale" class="text-primary">€ @Model.TotaleConIva.ToString("N2")</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <i class="bi bi-gear me-2"></i>Impostazioni
+                </div>
+                <div class="card-body">
+                    <label asp-for="Stato" class="form-label fw-bold"></label>
+                    <select asp-for="Stato" class="form-select"
+                            asp-items="Html.GetEnumSelectList<StatoPreventivo>()"></select>
+
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-warning btn-lg text-dark">
+                            <i class="bi bi-save me-2"></i>Salva Modifiche
+                        </button>
+                    </div>
+                    <a asp-action="Index" class="btn btn-outline-secondary w-100 mt-2">Annulla</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+<script>
+function nuovaRigaHtml() {
+    return `<tr class="riga-preventivo">
+        <td><input type="text" name="rigaDescrizione" class="form-control form-control-sm" placeholder="Descrizione" /></td>
+        <td><input type="number" name="rigaQuantita" class="form-control form-control-sm text-center qta" value="1" min="0.01" step="0.01" /></td>
+        <td><input type="number" name="rigaPrezzo" class="form-control form-control-sm text-end prezzo" value="0" min="0" step="0.01" /></td>
+        <td class="text-end align-middle fw-bold totale-riga">€ 0,00</td>
+        <td class="text-center align-middle">
+            <button type="button" class="btn btn-outline-danger btn-sm" onclick="rimuoviRiga(this)">
+                <i class="bi bi-x"></i>
+            </button>
+        </td>
+    </tr>`;
+}
+
+function aggiungiRiga() {
+    document.getElementById('righeBody').insertAdjacentHTML('beforeend', nuovaRigaHtml());
+    aggiornaEventi();
+}
+
+function rimuoviRiga(btn) {
+    if (document.querySelectorAll('.riga-preventivo').length > 1) {
+        btn.closest('tr').remove();
+        aggiornaTotali();
+    }
+}
+
+function aggiornaTotali() {
+    let imponibile = 0;
+    document.querySelectorAll('.riga-preventivo').forEach(riga => {
+        const qta  = parseFloat(riga.querySelector('.qta').value)    || 0;
+        const prez = parseFloat(riga.querySelector('.prezzo').value) || 0;
+        const tot  = qta * prez;
+        riga.querySelector('.totale-riga').textContent = '€ ' + tot.toLocaleString('it-IT', {minimumFractionDigits: 2});
+        imponibile += tot;
+    });
+    const iva    = imponibile * 0.22;
+    const totale = imponibile + iva;
+    const fmt = v => '€ ' + v.toLocaleString('it-IT', {minimumFractionDigits: 2});
+    document.getElementById('totImponibile').textContent = fmt(imponibile);
+    document.getElementById('totIva').textContent        = fmt(iva);
+    document.getElementById('totFinale').textContent     = fmt(totale);
+}
+
+function aggiornaEventi() {
+    document.querySelectorAll('.qta, .prezzo').forEach(i => { i.oninput = aggiornaTotali; });
+}
+
+aggiornaEventi();
+aggiornaTotali();
+</script>
+}
