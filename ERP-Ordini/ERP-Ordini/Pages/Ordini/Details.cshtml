@@ -1,0 +1,21 @@
+﻿@page
+@model ERP_Ordini.Pages.Ordini.DetailsModel
+@{
+    ViewData["Title"] = "Dettagli Ordine";
+}
+
+<div class="container mt-4">
+    <h1>Dettagli Ordine</h1>
+
+    <div class="card mt-3">
+        <div class="card-body">
+            <p><strong>ID Ordine:</strong> @Model.Ordine.IdOrdine</p>
+            <p><strong>Stato Ordine:</strong> @Model.Ordine.Stato</p>
+            <p><strong>Cliente:</strong> @Model.Ordine.DettagliOrdine?.IdCliente</p>
+            <p><strong>Data Ordine:</strong> @Model.Ordine.DettagliOrdine?.DataOrdine.ToShortDateString()</p>
+        </div>
+    </div>
+
+    <a asp-page="Edit" asp-route-id="@Model.Ordine.IdOrdine" class="btn btn-warning mt-3">Modifica</a>
+    <a asp-page="Index" class="btn btn-secondary mt-3 ms-2">Indietro</a>
+</div>

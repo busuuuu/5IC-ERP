@@ -1,0 +1,40 @@
+﻿@page
+@model ERP_Ordini.Pages.Ordini.EditModel
+@{
+    ViewData["Title"] = "Modifica Ordine";
+}
+
+<div class="container mt-4">
+    <h1>Modifica Ordine</h1>
+
+    <form method="post" class="mt-3">
+        <div class="mb-3">
+            <label class="form-label">Stato Ordine</label>
+            <select asp-for="Ordine.Stato" class="form-select">
+                <option value="InElaborazione">In Elaborazione</option>
+                <option value="Spedito">Spedito</option>
+                <option value="Consegnato">Consegnato</option>
+            </select>
+        </div>
+
+        <h4 class="mt-4">Dettagli Ordine</h4>
+        <div class="mb-3">
+            <label class="form-label">Cliente</label>
+            <input asp-for="Ordine.DettagliOrdine.IdCliente" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Data Ordine</label>
+            <input asp-for="Ordine.DettagliOrdine.DataOrdine" type="date" class="form-control" />
+        </div>
+
+        <!-- Placeholder per futura lista prodotti -->
+        <!-- <div class="mb-3">
+            <label class="form-label">Prodotti</label>
+            <input asp-for="Ordine.DettagliOrdine.Prodotti" class="form-control" placeholder="Non ancora implementato" disabled />
+        </div> -->
+
+        <button type="submit" class="btn btn-primary">Salva Modifiche</button>
+        <a asp-page="Index" class="btn btn-secondary ms-2">Annulla</a>
+    </form>
+</div>

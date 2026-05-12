@@ -1,0 +1,40 @@
+﻿@page
+@model ERP_Ordini.Pages.Ordini.IndexModel
+@{
+    ViewData["Title"] = "Ordini";
+}
+
+<div class="container mt-4">
+    <h1>Ordini</h1>
+    <a asp-page="Create" class="btn btn-success mb-3">Nuovo Ordine</a>
+
+    <table class="table table-striped table-hover align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Stato</th>
+                <th>Cliente</th>
+                <th>Data Ordine</th>
+                <th>Azioni</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ordine in Model.Ordini)
+            {
+                <tr>
+                    <td>@ordine.IdOrdine</td>
+                    <td>@ordine.Stato</td>
+                    <td>@ordine.DettagliOrdine?.IdCliente</td>
+                    <td>@ordine.DettagliOrdine?.DataOrdine.ToShortDateString()</td>
+                    <td>
+                        <div class="btn-group">
+                            <a asp-page="Edit" asp-route-id="@ordine.IdOrdine" class="btn btn-sm btn-primary">Modifica</a>
+                            <a asp-page="Details" asp-route-id="@ordine.IdOrdine" class="btn btn-sm btn-info">Dettagli</a>
+                            <a asp-page="Delete" asp-route-id="@ordine.IdOrdine" class="btn btn-sm btn-danger">Elimina</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
