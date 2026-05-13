@@ -1,0 +1,92 @@
+﻿@page "{id:int}"
+@model CLIENTI.Pages.Clienti.DettaglioOrdineModel
+@{
+    ViewData["Title"] = $"Ordine #{Model.Ordine.Id}";
+}
+
+<div class="container mt-4">
+
+    <a asp-page="/Clienti/Dashboard" asp-route-id="@Model.Ordine.ClienteId" class="btn btn-outline-secondary mb-3">
+        ← Torna agli ordini
+    </a>
+
+    <h1 class="mb-4">Ordine #@Model.Ordine.Id</h1>
+
+    <!-- Info ordine -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <p><strong>Data Ordine:</strong> @Model.Ordine.DataOrdine.ToString("dd/MM/yyyy HH:mm")</p>
+                    <p><strong>Stato:</strong> @Model.Ordine.Stato</p>
+                    @if (!string.IsNullOrEmpty(Model.Ordine.NumeroTracking))
+                    {
+                        <p><strong>Tracking:</strong> <span class="badge bg-dark">@Model.Ordine.NumeroTracking</span></p>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-end">
+                    <h3 class="text-primary">Totale: €@Model.Ordine.Totale.ToString("N2")</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Barra progresso stato -->
+    <div class="mb-4">
+        @{
+            int progress = Model.Ordine.Stato switch
+            {
+                CLIENTI.Models.StatoOrdine.Preventivo => 10,
+                CLIENTI.Models.StatoOrdine.InLavorazione => 35,
+                CLIENTI.Models.StatoOrdine.Spedito => 70,
+                CLIENTI.Models.StatoOrdine.Consegnato => 100,
+                _ => 0
+            };
+        }
+        <div class="progress" style="height: 30px;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: @progress%">
+                @progress%
+            </div>
+        </div>
+        <div class="d-flex justify-content-between mt-2">
+            <span class="@(Model.Ordine.Stato >= CLIENTI.Models.StatoOrdine.Preventivo ? "fw-bold text-primary" : "")">📝 Confermato</span>
+            <span class="@(Model.Ordine.Stato >= CLIENTI.Models.StatoOrdine.InLavorazione ? "fw-bold text-primary" : "")">🔧 In Lavorazione</span>
+            <span class="@(Model.Ordine.Stato >= CLIENTI.Models.StatoOrdine.Spedito ? "fw-bold text-primary" : "")">🚚 Spedito</span>
+            <span class="@(Model.Ordine.Stato >= CLIENTI.Models.StatoOrdine.Consegnato ? "fw-bold text-success" : "")">✅ Consegnato</span>
+        </div>
+    </div>
+
+    <!-- Prodotti ordinati -->
+    <h3>Prodotti nell'Ordine</h3>
+    <table class="table table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>Prodotto</th>
+                <th>Quantità</th>
+                <th>Prezzo Unitario</th>
+                <th>Subtotale</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var dettaglio in Model.Ordine.DettagliOrdine)
+            {
+                <tr>
+                    <td>@dettaglio.Articolo.Descrizione</td>
+                    <td>@dettaglio.Quantita</td>
+                    <td>€@dettaglio.PrezzoUnitario.ToString("N2")</td>
+                    <td>€@((dettaglio.Quantita * dettaglio.PrezzoUnitario).ToString("N2"))</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr class="fw-bold">
+                <td colspan="3" class="text-end">TOTALE</td>
+                <td>€@Model.Ordine.Totale.ToString("N2")</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

@@ -1,0 +1,118 @@
+﻿@page "{id:int}"
+@model CLIENTI.Pages.Clienti.DashboardModel
+@{
+    ViewData["Title"] = "Area Cliente - TechLogix";
+}
+
+<div class="container mt-4">
+
+    <h1 class="mb-4">Benvenuto, @Model.Cliente.RagioneSociale</h1>
+
+    @if (Model.Cliente == null)
+    {
+        <div class="alert alert-danger">Cliente non trovato.</div>
+    }
+    else
+    {
+        <!-- Dati cliente -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">I Tuoi Dati</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Ragione Sociale:</strong> @Model.Cliente.RagioneSociale</p>
+                        <p><strong>Indirizzo:</strong> @Model.Cliente.Indirizzo</p>
+                        <p><strong>Città:</strong> @Model.Cliente.Citta (@Model.Cliente.CAP)</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Telefono:</strong> @Model.Cliente.Telefono</p>
+                        <p><strong>Email:</strong> @Model.Cliente.Email</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Riepilogo ordini -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card border-primary">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Ordini Totali</h5>
+                        <h2>@Model.Cliente.Ordini.Count</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-warning">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">In Corso</h5>
+                        <h2>@Model.Cliente.Ordini.Count(o => o.Stato == CLIENTI.Models.StatoOrdine.InLavorazione || o.Stato == CLIENTI.Models.StatoOrdine.Spedito)</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-success">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Completati</h5>
+                        <h2>@Model.Cliente.Ordini.Count(o => o.Stato == CLIENTI.Models.StatoOrdine.Consegnato)</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabella ordini -->
+        <h3>I Tuoi Ordini</h3>
+        @if (!Model.Cliente.Ordini.Any())
+        {
+            <div class="alert alert-info">Non hai ancora effettuato ordini.</div>
+        }
+        else
+        {
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Ordine #</th>
+                        <th>Data</th>
+                        <th>Totale</th>
+                        <th>Stato</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var ordine in Model.Cliente.Ordini)
+                    {
+                        <tr>
+                            <td><strong>#@ordine.Id</strong></td>
+                            <td>@ordine.DataOrdine.ToString("dd/MM/yyyy")</td>
+                            <td>€@ordine.Totale.ToString("N2")</td>
+                            <td>
+                                @switch (ordine.Stato)
+                                {
+                                    case CLIENTI.Models.StatoOrdine.Preventivo:
+                                        <span class="badge bg-warning text-dark">Preventivo</span>
+                                        break;
+                                    case CLIENTI.Models.StatoOrdine.InLavorazione:
+                                        <span class="badge bg-info text-dark">In Lavorazione</span>
+                                        break;
+                                    case CLIENTI.Models.StatoOrdine.Spedito:
+                                        <span class="badge bg-primary">Spedito</span>
+                                        break;
+                                    case CLIENTI.Models.StatoOrdine.Consegnato:
+                                        <span class="badge bg-success">Consegnato</span>
+                                        break;
+                                }
+                            </td>
+                            <td>
+                                <a asp-page="/Clienti/DettaglioOrdine" asp-route-id="@ordine.Id" class="btn btn-sm btn-outline-primary">
+                                    Dettaglio
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    }
+</div>
