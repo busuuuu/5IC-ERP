@@ -1,0 +1,84 @@
+@page
+@model FornitoriERP.Pages.Fornitori.CreateModel
+
+{
+    ViewData["Title"] = "Nuovo Fornitore";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-plus-circle"></i> Crea Nuovo Fornitore
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        if (!ViewData.ModelState.IsValid)
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                <h4 class="alert-heading">Errore!</h4>
+                                <p>Correggi gli errori prima di procedere:</p>
+                                <hr>
+                                <ul class="mb-0">
+                                    foreach (var modelState in ViewData.ModelState.Values)
+                                    {
+                                        foreach (var error in modelState.Errors)
+                                        {
+                                            <li>error.ErrorMessage</li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        }
+
+                        <div class="mb-3">
+                            <label asp-for="Fornitore.NomeFornitore" class="form-label"></label>
+                            <input asp-for="Fornitore.NomeFornitore" class="form-control form-control-lg" 
+                                   placeholder="Es. Acme Srl" />
+                            <span asp-validation-for="Fornitore.NomeFornitore" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Fornitore.ContattoFornitore" class="form-label"></label>
+                            <input asp-for="Fornitore.ContattoFornitore" class="form-control" 
+                                   placeholder="Nome del referente" />
+                            <span asp-validation-for="Fornitore.ContattoFornitore" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Fornitore.Telefono" class="form-label"></label>
+                                <input asp-for="Fornitore.Telefono" class="form-control" 
+                                       placeholder="Es. 02 1234567" />
+                                <span asp-validation-for="Fornitore.Telefono" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Fornitore.Email" class="form-label"></label>
+                                <input asp-for="Fornitore.Email" type="email" class="form-control" 
+                                       placeholder="Es. info@acme.it" />
+                                <span asp-validation-for="Fornitore.Email" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="@Url.Page("./Index")" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left"></i> Annulla
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i> Salva
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

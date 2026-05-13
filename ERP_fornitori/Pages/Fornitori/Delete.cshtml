@@ -1,0 +1,52 @@
+@page "{id:int}"
+@model FornitoriERP.Pages.Fornitori.DeleteModel
+
+@{
+    ViewData["Title"] = "Elimina Fornitore";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-exclamation-triangle"></i> Conferma Eliminazione
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning" role="alert">
+                        <strong>Attenzione!</strong> Questa azione non può essere annullata.
+                    </div>
+
+                    <p class="lead mb-4">
+                        Sei sicuro di voler eliminare il fornitore:
+                    </p>
+
+                    <div class="card mb-4 bg-light">
+                        <div class="card-body">
+                            <h5 class="card-title">@Model.Fornitore.NomeFornitore</h5>
+                            <p class="card-text mb-0">
+                                <small class="text-muted">
+                                    ID: @Model.Fornitore.IdFornitore<br />
+                                    Contatto: @(Model.Fornitore.ContattoFornitore ?? "Non specificato")
+                                </small>
+                            </p>
+                        </div>
+                    </div>
+
+                    <form method="post">
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="@Url.Page("./Index")" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left"></i> Annulla
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash"></i> Elimina
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

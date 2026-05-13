@@ -1,0 +1,95 @@
+@page "{id:int}"
+@model FornitoriERP.Pages.Fornitori.DetailsModel
+
+@{
+    ViewData["Title"] = "Dettagli Fornitore";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-eye"></i> Dettagli Fornitore
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong class="text-muted">Nome Fornitore:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            <p class="mb-0 fs-5">@Model.Fornitore.NomeFornitore</p>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong class="text-muted">Contatto:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            <p class="mb-0">@(Model.Fornitore.ContattoFornitore ?? "Non specificato")</p>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong class="text-muted">Telefono:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            @if (!string.IsNullOrEmpty(Model.Fornitore.Telefono))
+                            {
+                                <a href="tel:@Model.Fornitore.Telefono" class="mb-0">
+                                    @Model.Fornitore.Telefono
+                                </a>
+                            }
+                            else
+                            {
+                                <p class="mb-0">Non specificato</p>
+                            }
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong class="text-muted">Email:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            @if (!string.IsNullOrEmpty(Model.Fornitore.Email))
+                            {
+                                <a href="mailto:@Model.Fornitore.Email" class="mb-0">
+                                    @Model.Fornitore.Email
+                                </a>
+                            }
+                            else
+                            {
+                                <p class="mb-0">Non specificato</p>
+                            }
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="@Url.Page("./Index")" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Indietro
+                        </a>
+                        <a href="@Url.Page("./Edit", new { id = Model.Fornitore.IdFornitore })" class="btn btn-warning">
+                            <i class="bi bi-pencil"></i> Modifica
+                        </a>
+                        <a href="@Url.Page("./Delete", new { id = Model.Fornitore.IdFornitore })" class="btn btn-danger">
+                            <i class="bi bi-trash"></i> Elimina
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
